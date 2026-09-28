@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMORA — Premium Printed T-Shirts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & TOKENS ============ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#0d0d0d; --ink:#1a1a1a; --white:#fafafa; --paper:#f4f2ee;
+  --grey:#8a8a86; --line:#e5e2dc; --accent:#b58a52; --accent-d:#96703d;
+  --font-d:'Archivo',sans-serif; --font-b:'Inter',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);color:var(--ink);background:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select{font-family:inherit;font-size:14px}
+h1,h2,h3,h4{font-family:var(--font-d);letter-spacing:-.02em}
+::selection{background:var(--black);color:var(--white)}
+.container{width:min(1280px,92%);margin:0 auto}
+
+/* ============ ANNOUNCEMENT ============ */
+.announce{background:var(--black);color:var(--white);text-align:center;font-size:11px;letter-spacing:.22em;text-transform:uppercase;padding:9px 16px}
+.announce span{color:var(--accent)}
+
+/* ============ NAVIGATION ============ */
+header{position:sticky;top:0;z-index:200;background:rgba(250,250,250,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:.3s}
+.nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+.logo{font-family:var(--font-d);font-weight:900;font-size:26px;letter-spacing:.32em;cursor:pointer}
+.logo em{font-style:normal;color:var(--accent)}
+.nav-links{display:flex;gap:34px;list-style:none}
+.nav-links a{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;position:relative;padding:6px 0;transition:color .25s}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1.5px;background:var(--black);transition:width .35s var(--ease)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-icons{display:flex;gap:22px;align-items:center}
+.icon-btn{position:relative;color:var(--ink);transition:color .25s}
+.icon-btn:hover{color:var(--accent)}
+.icon-btn svg{width:20px;height:20px}
+.badge{position:absolute;top:-7px;right:-9px;background:var(--black);color:var(--white);font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;transform:scale(0);transition:transform .3s var(--ease)}
+.badge.show{transform:scale(1)}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:6px}
+.hamburger span{width:24px;height:2px;background:var(--black);transition:.3s}
+
+/* search bar */
+.searchbar{max-height:0;overflow:hidden;transition:max-height .45s var(--ease);border-top:1px solid transparent}
+.searchbar.open{max-height:90px;border-top:1px solid var(--line)}
+.searchbar-inner{display:flex;align-items:center;gap:14px;padding:20px 0}
+.searchbar input{flex:1;border:none;background:transparent;font-size:16px;outline:none;letter-spacing:.02em}
+.searchbar input::placeholder{color:var(--grey)}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:calc(100vh - 112px);display:grid;grid-template-columns:1.05fr .95fr;overflow:hidden;background:var(--paper)}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:8vh 6vw 8vh max(6vw,calc((100vw - 1280px)/2 + 4vw))}
+.hero-kicker{display:flex;align-items:center;gap:14px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--grey);margin-bottom:28px;opacity:0;animation:rise .9s var(--ease) .1s forwards}
+.hero-kicker::before{content:'';width:44px;height:1px;background:var(--accent)}
+.hero h1{font-size:clamp(52px,7.2vw,108px);font-weight:900;line-height:.95;text-transform:uppercase;opacity:0;animation:rise .9s var(--ease) .25s forwards}
+.hero h1 .outline{-webkit-text-stroke:2px var(--black);color:transparent}
+.hero-sub{margin:30px 0 42px;font-size:17px;font-weight:300;color:#55554f;max-width:460px;line-height:1.7;opacity:0;animation:rise .9s var(--ease) .4s forwards}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:rise .9s var(--ease) .55s forwards}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:17px 36px;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;transition:.35s var(--ease);position:relative;overflow:hidden}
+.btn-dark{background:var(--black);color:var(--white)}
+.btn-dark:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.18)}
+.btn-ghost{border:1.5px solid var(--black);color:var(--black)}
+.btn-ghost:hover{background:var(--black);color:var(--white);transform:translateY(-2px)}
+.hero-right{position:relative;overflow:hidden}
+.hero-right img{width:100%;height:100%;object-fit:cover;object-position:top;transform:scale(1.06);animation:heroZoom 8s var(--ease) forwards}
+.hero-tag{position:absolute;bottom:34px;left:34px;background:var(--white);padding:18px 24px;box-shadow:0 20px 50px rgba(0,0,0,.14);opacity:0;animation:rise .9s var(--ease) .8s forwards}
+.hero-tag b{font-family:var(--font-d);font-size:13px;letter-spacing:.14em;text-transform:uppercase;display:block}
+.hero-tag span{font-size:12px;color:var(--grey)}
+.hero-scroll{position:absolute;bottom:30px;left:6vw;display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--grey);opacity:0;animation:rise 1s var(--ease) 1s forwards}
+.hero-scroll::after{content:'';width:1px;height:44px;background:var(--black);animation:scrollLine 2s ease infinite}
+@keyframes rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+@keyframes heroZoom{to{transform:scale(1)}}
+@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ============ MARQUEE ============ */
+.marquee{background:var(--black);color:var(--white);overflow:hidden;padding:16px 0;white-space:nowrap}
+.marquee-track{display:inline-flex;gap:60px;animation:marquee 26s linear infinite;font-size:12px;letter-spacing:.3em;text-transform:uppercase}
+.marquee-track i{font-style:normal;color:var(--accent)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ============ SECTIONS ============ */
+section{padding:110px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px;gap:24px;flex-wrap:wrap}
+.sec-head h2{font-size:clamp(32px,4vw,52px);font-weight:800;text-transform:uppercase;line-height:1.02}
+.sec-head .label{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:14px;font-weight:600}
+.sec-link{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;border-bottom:1.5px solid var(--black);padding-bottom:5px;transition:.3s}
+.sec-link:hover{color:var(--accent);border-color:var(--accent)}
+
+/* category tabs */
+.tabs{display:flex;gap:10px;flex-wrap:wrap}
+.tab{padding:11px 22px;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--line);background:transparent;transition:.3s;border-radius:100px}
+.tab:hover{border-color:var(--black)}
+.tab.active{background:var(--black);color:var(--white);border-color:var(--black)}
+
+/* ============ PRODUCT CARDS ============ */
+.grid-products{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.card{opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.card.in{opacity:1;transform:none}
+.card-img{position:relative;overflow:hidden;background:var(--paper);aspect-ratio:3/4;cursor:pointer}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.card:hover .card-img img{transform:scale(1.07)}
+.card-img .alt{position:absolute;inset:0;opacity:0;transition:opacity .5s}
+.card:hover .card-img .alt{opacity:1}
+.card-flag{position:absolute;top:14px;left:14px;background:var(--white);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:7px 12px;z-index:2}
+.card-flag.new{background:var(--black);color:var(--white)}
+.wish-btn{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;background:var(--white);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(-6px);transition:.35s var(--ease);z-index:2}
+.card:hover .wish-btn{opacity:1;transform:none}
+.wish-btn svg{width:17px;height:17px;fill:none;stroke:var(--black);stroke-width:1.8}
+.wish-btn.active svg{fill:var(--accent);stroke:var(--accent)}
+.card-actions{position:absolute;left:0;right:0;bottom:0;display:flex;transform:translateY(100%);transition:transform .4s var(--ease);z-index:2}
+.card-actions button{flex:1;padding:15px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:var(--black);color:var(--white);transition:.3s}
+.card-actions button:hover{background:var(--accent)}
+.card-actions button:nth-child(2){background:var(--white);color:var(--black)}
+.card-actions button:nth-child(2):hover{background:var(--paper)}
+.card-info{padding:18px 4px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card-info h3{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer}
+.card-info h3:hover{color:var(--accent)}
+.card-cat{font-size:11px;color:var(--grey);margin-top:5px;letter-spacing:.1em;text-transform:uppercase}
+.card-price{font-family:var(--font-d);font-weight:700;font-size:15px;white-space:nowrap}
+.stars{color:var(--accent);font-size:12px;letter-spacing:2px;margin-top:6px}
+
+/* ============ BRAND SECTION ============ */
+.brand{background:var(--paper)}
+.brand-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.brand-img{position:relative}
+.brand-img img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.brand-img::after{content:'AMORA';position:absolute;bottom:-24px;right:-24px;font-family:var(--font-d);font-weight:900;font-size:clamp(60px,7vw,110px);-webkit-text-stroke:1.5px var(--black);color:transparent;letter-spacing:.06em;pointer-events:none}
+.brand-copy .label{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);font-weight:600;display:block;margin-bottom:16px}
+.brand-copy h2{font-size:clamp(32px,3.6vw,50px);font-weight:800;text-transform:uppercase;line-height:1.05;margin-bottom:26px}
+.brand-copy p{color:#55554f;line-height:1.85;font-weight:300;margin-bottom:18px}
+.brand-stats{display:flex;gap:48px;margin-top:38px;flex-wrap:wrap}
+.brand-stats b{font-family:var(--font-d);font-size:34px;font-weight:800;display:block}
+.brand-stats span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey)}
+
+/* ============ COLLECTION BANNER ============ */
+.collection{padding:0;position:relative;height:78vh;min-height:520px;overflow:hidden;display:flex;align-items:center}
+.collection img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.collection .overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,13,13,.72) 0%,rgba(13,13,13,.25) 60%,transparent)}
+.collection-content{position:relative;z-index:2;color:var(--white);max-width:620px}
+.collection-content .label{color:var(--accent);font-size:11px;letter-spacing:.32em;text-transform:uppercase;font-weight:600}
+.collection-content h2{font-size:clamp(44px,6vw,88px);font-weight:900;text-transform:uppercase;line-height:.96;margin:18px 0 22px}
+.collection-content p{font-weight:300;line-height:1.8;color:#d8d6d0;margin-bottom:36px;max-width:440px}
+.btn-light{background:var(--white);color:var(--black)}
+.btn-light:hover{background:var(--accent);color:var(--white);transform:translateY(-2px)}
+
+/* ============ WHY ============ */
+.why-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
+.why-card{border:1px solid var(--line);padding:38px 26px;transition:.4s var(--ease);background:var(--white)}
+.why-card:hover{background:var(--black);color:var(--white);transform:translateY(-8px);border-color:var(--black)}
+.why-card:hover p{color:#a8a6a0}
+.why-card svg{width:34px;height:34px;stroke:var(--accent);stroke-width:1.5;fill:none;margin-bottom:22px}
+.why-card h3{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.why-card p{font-size:13px;line-height:1.7;color:var(--grey);font-weight:300}
+
+/* ============ REVIEWS ============ */
+.reviews{background:var(--paper)}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.rev-card{background:var(--white);padding:40px 34px;position:relative;transition:.4s var(--ease);border:1px solid transparent}
+.rev-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(0,0,0,.08)}
+.rev-card .quote{font-family:var(--font-d);font-size:64px;line-height:.6;color:var(--accent);display:block;margin-bottom:20px}
+.rev-card p{font-size:15px;line-height:1.85;font-weight:300;color:#4a4a45;margin-bottom:26px;font-style:italic}
+.rev-meta{display:flex;align-items:center;gap:16px}
+.rev-avatar{width:46px;height:46px;border-radius:50%;background:var(--black);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:800;font-size:15px}
+.rev-meta b{font-size:14px;display:block}
+.rev-meta span{font-size:12px;color:var(--grey)}
+
+/* ============ INSTAGRAM ============ */
+.ig-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.ig-item{position:relative;overflow:hidden;aspect-ratio:1;cursor:pointer;background:var(--paper)}
+.ig-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.ig-item::after{content:'';position:absolute;inset:0;background:rgba(13,13,13,.45);opacity:0;transition:.4s}
+.ig-item:hover::after{opacity:1}
+.ig-item:hover img{transform:scale(1.1)}
+.ig-item svg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.5);width:26px;height:26px;stroke:var(--white);fill:none;stroke-width:1.6;opacity:0;transition:.4s;z-index:2}
+.ig-item:hover svg{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+/* ============ NEWSLETTER ============ */
+.newsletter{background:var(--black);color:var(--white);text-align:center}
+.newsletter .label{color:var(--accent);font-size:11px;letter-spacing:.32em;text-transform:uppercase;font-weight:600}
+.newsletter h2{font-size:clamp(30px,4vw,54px);font-weight:900;text-transform:uppercase;margin:18px 0 16px}
+.newsletter p{color:#a8a6a0;font-weight:300;margin-bottom:42px}
+.news-form{display:flex;max-width:520px;margin:0 auto;border:1px solid #3a3a3a}
+.news-form input{flex:1;background:transparent;border:none;outline:none;color:var(--white);padding:18px 22px;font-size:14px}
+.news-form input::placeholder{color:#6a6a66}
+.news-form button{background:var(--white);color:var(--black);padding:0 34px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;transition:.3s}
+.news-form button:hover{background:var(--accent);color:var(--white)}
+
+/* ============ FOOTER ============ */
+footer{background:#0a0a0a;color:#a8a6a0;padding:90px 0 0}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:50px;padding-bottom:70px}
+.foot-grid .logo{color:var(--white);margin-bottom:20px}
+.foot-grid p{font-size:14px;line-height:1.85;font-weight:300;max-width:300px}
+.foot-grid h4{color:var(--white);font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:24px}
+.foot-grid ul{list-style:none}
+.foot-grid li{margin-bottom:13px}
+.foot-grid ul a{font-size:14px;transition:.25s}
+.foot-grid ul a:hover{color:var(--accent);padding-left:6px}
+.foot-contact li{display:flex;gap:12px;font-size:14px;line-height:1.6;margin-bottom:16px}
+.socials{display:flex;gap:12px;margin-top:26px}
+.socials a{width:40px;height:40px;border:1px solid #333;display:flex;align-items:center;justify-content:center;transition:.3s}
+.socials a svg{width:16px;height:16px;fill:#a8a6a0;transition:.3s}
+.socials a:hover{background:var(--accent);border-color:var(--accent)}
+.socials a:hover svg{fill:var(--white)}
+.foot-bottom{border-top:1px solid #222;padding:26px 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px}
+.foot-bottom a:hover{color:var(--accent)}
+
+/* ============ REVEAL ANIMATION ============ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* ============ DRAWERS / MODALS ============ */
+.overlay{position:fixed;inset:0;background:rgba(13,13,13,.55);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:.4s;z-index:300}
+.overlay.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);background:var(--white);z-index:310;transform:translateX(105%);transition:transform .5s var(--ease);display:flex;flex-direction:column}
+.drawer.show{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;padding:26px 30px;border-bottom:1px solid var(--line)}
+.drawer-head h3{font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.close-x{font-size:26px;line-height:1;transition:.3s}
+.close-x:hover{color:var(--accent);transform:rotate(90deg)}
+.drawer-body{flex:1;overflow-y:auto;padding:24px 30px}
+.drawer-foot{padding:24px 30px;border-top:1px solid var(--line)}
+.cart-row{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+.cart-row img{width:82px;height:104px;object-fit:cover;background:var(--paper)}
+.cart-row h4{font-size:14px;text-transform:uppercase;letter-spacing:.04em}
+.cart-row .meta{font-size:12px;color:var(--grey);margin:6px 0 12px}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line)}
+.qty button{width:30px;height:30px;font-size:15px;transition:.2s}
+.qty button:hover{background:var(--black);color:var(--white)}
+.qty span{width:34px;text-align:center;font-size:13px;font-weight:600}
+.cart-row .right{margin-left:auto;text-align:right;display:flex;flex-direction:column;justify-content:space-between}
+.cart-row .price{font-family:var(--font-d);font-weight:700}
+.remove{font-size:11px;color:var(--grey);text-decoration:underline;transition:.2s}
+.remove:hover{color:#c0392b}
+.totals div{display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px;color:#55554f}
+.totals .grand{font-family:var(--font-d);font-weight:800;font-size:19px;color:var(--black);border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+.w-full{width:100%;justify-content:center;margin-top:16px}
+.empty{text-align:center;padding:70px 20px;color:var(--grey)}
+.empty b{display:block;font-family:var(--font-d);font-size:19px;color:var(--ink);text-transform:uppercase;margin-bottom:10px;letter-spacing:.06em}
+
+/* modal */
+.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);width:min(420px,92vw);background:var(--white);z-index:310;opacity:0;pointer-events:none;transition:.4s var(--ease);padding:44px 40px}
+.modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.modal h3{font-size:22px;font-weight:800;text-transform:uppercase;margin-bottom:6px}
+.modal .sub{font-size:13px;color:var(--grey);margin-bottom:28px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:8px;color:#55554f}
+.field input,.field select{width:100%;border:1px solid var(--line);padding:14px 16px;outline:none;transition:.25s;background:var(--white)}
+.field input:focus,.field select:focus{border-color:var(--black)}
+.modal .switch{text-align:center;font-size:13px;margin-top:22px;color:var(--grey)}
+.modal .switch a{color:var(--black);font-weight:600;border-bottom:1px solid var(--black)}
+.toast{position:fixed;bottom:28px;left:50%;transform:translate(-50%,80px);background:var(--black);color:var(--white);padding:15px 28px;font-size:13px;letter-spacing:.04em;z-index:400;transition:.45s var(--ease);display:flex;gap:10px;align-items:center}
+.toast.show{transform:translate(-50%,0)}
+.toast i{color:var(--accent);font-style:normal}
+
+/* ============ PAGES (SPA) ============ */
+.page{display:none}
+.page.active{display:block}
+.page-hero{padding:80px 0 60px;border-bottom:1px solid var(--line)}
+.page-hero h1{font-size:clamp(38px,5vw,68px);font-weight:900;text-transform:uppercase}
+.page-hero .crumb{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
+.page-hero .crumb a:hover{color:var(--accent)}
+
+/* shop layout */
+.shop-wrap{display:grid;grid-template-columns:250px 1fr;gap:56px;padding:60px 0 110px}
+.filter-group{margin-bottom:36px}
+.filter-group h4{font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.check{display:flex;align-items:center;gap:12px;margin-bottom:12px;font-size:14px;color:#55554f;cursor:pointer;transition:.2s}
+.check:hover{color:var(--black)}
+.check input{accent-color:var(--black);width:16px;height:16px}
+.shop-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px;gap:16px;flex-wrap:wrap}
+.shop-toolbar .count{font-size:13px;color:var(--grey)}
+.shop-toolbar select{border:1px solid var(--line);padding:12px 16px;outline:none;letter-spacing:.06em;font-size:12px;text-transform:uppercase;font-weight:600}
+.filter-toggle{display:none}
+.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+
+/* product detail */
+.pd-wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;padding:60px 0 110px}
+.pd-gallery{position:sticky;top:110px;align-self:start}
+.pd-main{aspect-ratio:3/4;overflow:hidden;background:var(--paper);cursor:zoom-in}
+.pd-main img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.pd-thumbs{display:flex;gap:12px;margin-top:12px}
+.pd-thumbs img{width:86px;height:108px;object-fit:cover;cursor:pointer;border:1.5px solid transparent;transition:.25s;background:var(--paper)}
+.pd-thumbs img.active,.pd-thumbs img:hover{border-color:var(--black)}
+.pd-info .crumb{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);margin-bottom:14px}
+.pd-info h1{font-size:clamp(28px,3vw,42px);font-weight:800;text-transform:uppercase;line-height:1.05}
+.pd-price{font-family:var(--font-d);font-size:26px;font-weight:800;margin:18px 0 6px}
+.pd-price s{color:var(--grey);font-size:18px;font-weight:500;margin-left:12px}
+.pd-desc{color:#55554f;line-height:1.85;font-weight:300;margin:22px 0 30px}
+.pd-block{border-top:1px solid var(--line);padding:26px 0}
+.pd-block h4{font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.size-guide-link{font-size:11px;color:var(--accent);text-decoration:underline;cursor:pointer;letter-spacing:.04em}
+.sizes{display:flex;gap:10px;flex-wrap:wrap}
+.size{width:52px;height:52px;border:1px solid var(--line);font-size:13px;font-weight:600;transition:.25s;display:flex;align-items:center;justify-content:center}
+.size:hover{border-color:var(--black)}
+.size.active{background:var(--black);color:var(--white);border-color:var(--black)}
+.pd-buy{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
+.pd-buy .qty{height:54px}
+.pd-buy .qty button{width:46px;height:100%}
+.pd-meta{font-size:13px;color:#55554f;line-height:2.1}
+.pd-meta b{color:var(--black)}
+.acc{border-top:1px solid var(--line)}
+.acc-item{border-bottom:1px solid var(--line)}
+.acc-head{width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 0;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;transition:.25s}
+.acc-head:hover{color:var(--accent)}
+.acc-head span{font-size:20px;font-weight:300;transition:.3s}
+.acc-item.open .acc-head span{transform:rotate(45deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .45s var(--ease)}
+.acc-body p{padding:0 0 22px;font-size:14px;color:#55554f;line-height:1.85;font-weight:300}
+
+/* checkout */
+.co-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:60px;padding:60px 0 110px;align-items:start}
+.co-form h3{font-size:17px;text-transform:uppercase;letter-spacing:.08em;margin:34px 0 20px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.co-form h3:first-child{margin-top:0}
+.co-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.summary{background:var(--paper);padding:36px;position:sticky;top:110px}
+.summary h3{font-size:17px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:24px}
+.sum-row{display:flex;gap:14px;margin-bottom:16px;font-size:13px}
+.sum-row img{width:56px;height:70px;object-fit:cover}
+.sum-row .grow{flex:1}
+.sum-row .grow b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.sum-row .grow span{color:var(--grey);font-size:12px}
+
+/* size guide table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--black);color:var(--white);padding:12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+td{padding:12px;text-align:center;border-bottom:1px solid var(--line)}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1080px){
+  .grid-products{grid-template-columns:repeat(3,1fr)}
+  .why-grid{grid-template-columns:repeat(3,1fr)}
+  .ig-grid{grid-template-columns:repeat(4,1fr)}
+  .shop-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:860px){
+  .nav-links{position:fixed;inset:0;background:var(--white);flex-direction:column;align-items:center;justify-content:center;gap:32px;transform:translateX(100%);transition:.5s var(--ease);z-index:250}
+  .nav-links.open{transform:none}
+  .nav-links a{font-size:18px}
+  .hamburger{display:flex;z-index:260}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-right{height:56vh}
+  .hero-left{padding:64px 6vw}
+  .hero-scroll{display:none}
+  .brand-grid,.pd-wrap,.co-wrap{grid-template-columns:1fr;gap:44px}
+  .pd-gallery,.summary{position:static}
+  .shop-wrap{grid-template-columns:1fr}
+  .filters{position:fixed;inset:0 auto 0 0;width:min(320px,85vw);background:var(--white);z-index:310;padding:90px 30px 30px;transform:translateX(-105%);transition:.5s var(--ease);overflow-y:auto}
+  .filters.show{transform:none}
+  .filter-toggle{display:inline-flex}
+  .rev-grid{grid-template-columns:1fr}
+  section{padding:76px 0}
+  .ig-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:560px){
+  .grid-products,.shop-grid{grid-template-columns:1fr 1fr;gap:14px}
+  .card-info h3{font-size:12px}
+  .why-grid{grid-template-columns:1fr 1fr}
+  .ig-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr}
+  .co-row{grid-template-columns:1fr}
+  .hero h1{font-size:15vw}
+  .btn{padding:15px 24px;font-size:11px}
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- ANNOUNCEMENT -->
+<div class="announce">Free worldwide shipping on orders over <span>$120</span> — 30-day returns</div>
+
+<!-- NAVIGATION -->
+<header>
+  <div class="container nav">
+    <div class="logo" onclick="go('home')">AMO<em>R</em>A</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a onclick="go('home')" class="active" data-nav="home">Home</a></li>
+      <li><a onclick="go('shop')" data-nav="shop">Shop</a></li>
+      <li><a onclick="go('shop','new')" data-nav="new">New Arrivals</a></li>
+      <li><a onclick="go('home');setTimeout(()=>document.getElementById('collection').scrollIntoView({behavior:'smooth'}),100)" data-nav="collections">Collections</a></li>
+      <li><a onclick="go('home');setTimeout(()=>document.getElementById('brand').scrollIntoView({behavior:'smooth'}),100)" data-nav="about">About Us</a></li>
+      <li><a onclick="go('home');setTimeout(()=>document.getElementById('footer').scrollIntoView({behavior:'smooth'}),100)" data-nav="contact">Contact</a></li>
+    </ul>
+    <div class="nav-icons">
+      <button class="icon-btn" onclick="toggleSearch()" title="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </button>
+      <button class="icon-btn" onclick="openModal('loginModal')" title="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </button>
+      <button class="icon-btn" onclick="openDrawer('wishDrawer')" title="Wishlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-8-5.5-10-10C.5 7 3 4 6.5 4 9 4 11 6 12 7.5 13 6 15 4 17.5 4 21 4 23.5 7 22 11c-2 4.5-10 10-10 10z"/></svg>
+        <span class="badge" id="wishBadge">0</span>
+      </button>
+      <button class="icon-btn" onclick="openDrawer('cartDrawer')" title="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 7h12l1.5 13h-15L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+        <span class="badge" id="cartBadge">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="searchbar" id="searchbar">
+    <div class="container searchbar-inner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8a86" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="Search products…" oninput="runSearch(this.value)">
+      <button class="close-x" onclick="toggleSearch()">×</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HOME PAGE ================= -->
+<main id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero" style="padding:0">
+    <div class="hero-left">
+      <div class="hero-kicker">Premium Print Collection — 2026</div>
+      <h1>WEAR YOUR<br><span class="outline">STATEMENT.</span></h1>
+      <p class="hero-sub">Premium printed T-shirts designed to express your style. Heavyweight fabrics, museum-grade prints, and silhouettes built for confidence.</p>
+      <div class="hero-cta">
+        <button class="btn btn-dark" onclick="go('shop')">Shop Now <span>→</span></button>
+        <button class="btn btn-ghost" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="https://kimi-web-img.kimi.ai/img/m.media-amazon.com/c4418d8bd4f3ad6ff445c273e36108bb500db18b.jpg" alt="AMORA premium oversized graphic tee">
+      <div class="hero-tag"><b>Metropolis Tee</b><span>Drop 07 — Bestseller</span></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee"><div class="marquee-track" id="marquee"></div></div>
+
+  <!-- FEATURED PRODUCTS -->
+  <section>
+    <div class="container">
+      <div class="sec-head reveal">
+        <div><span class="label">Featured</span><h2>The Essentials</h2></div>
+        <div class="tabs" id="homeTabs">
+          <button class="tab active" data-cat="all">All</button>
+          <button class="tab" data-cat="oversized">Oversized</button>
+          <button class="tab" data-cat="graphic">Graphic</button>
+          <button class="tab" data-cat="minimal">Minimal</button>
+          <button class="tab" data-cat="new">New Arrivals</button>
+        </div>
+      </div>
+      <div class="grid-products" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- BRAND -->
+  <section class="brand" id="brand">
+    <div class="container brand-grid">
+      <div class="brand-img reveal"><img src="https://kimi-web-img.kimi.ai/img/www.bringitonline.in/c697edc0cd340f69be2757331065780979eef5a6.jpg" alt="AMORA lifestyle"></div>
+      <div class="brand-copy reveal">
+        <span class="label">The Brand</span>
+        <h2>Quality You Can Feel. Design You Can Own.</h2>
+        <p>AMORA was founded on a simple belief: a T-shirt should never be basic. Every piece begins with 240 GSM heavyweight cotton — combed, compacted, and pre-shrunk for a fit that stays true.</p>
+        <p>Our prints are cured at industrial grade, meaning they won't crack, fade, or peel — wash after wash, year after year. Each design is produced in limited runs, so what you wear remains uniquely yours.</p>
+        <div class="brand-stats">
+          <div><b>240</b><span>GSM Cotton</span></div>
+          <div><b>50K+</b><span>Customers</span></div>
+          <div><b>4.9</b><span>Avg. Rating</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEW COLLECTION -->
+  <section class="collection" id="collection">
+    <img class="bg" src="https://kimi-web-img.kimi.ai/img/www.bringitonline.in/a476a29050dd9e2f0aa6b5d68ae39ff1cce53cad.jpg" alt="AMORA Archive Collection">
+    <div class="overlay"></div>
+    <div class="container"><div class="collection-content reveal">
+      <span class="label">Just Landed</span>
+      <h2>Archive<br>Collection</h2>
+      <p>Hand-drawn graphics inspired by old-world ateliers and modern street culture. Limited run of 500 pieces worldwide.</p>
+      <button class="btn btn-light" onclick="go('shop','new')">View Collection →</button>
+    </div></div>
+  </section>
+
+  <!-- WHY -->
+  <section>
+    <div class="container">
+      <div class="sec-head reveal"><div><span class="label">Why AMORA</span><h2>Built Different</h2></div></div>
+      <div class="why-grid">
+        <div class="why-card reveal"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 7.6l5.4-.8L12 2z"/></svg><h3>Premium Quality</h3><p>Heavyweight 240 GSM combed cotton, garment-dyed and pre-shrunk.</p></div>
+        <div class="why-card reveal"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><h3>High-Quality Prints</h3><p>Industrial screen & DTG printing, cured to survive 50+ washes.</p></div>
+        <div class="why-card reveal"><svg viewBox="0 0 24 24"><path d="M20.4 14.5L12 22 2 12V2h10l8.4 8.4a2 2 0 0 1 0 2.1z"/><circle cx="7" cy="7" r="1.5"/></svg><h3>Comfortable Fabric</h3><p>Breathable, bio-washed cotton with a soft-hand premium finish.</p></div>
+        <div class="why-card reveal"><svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="11" cy="11" r="2"/></svg><h3>Unique Designs</h3><p>Limited-run artwork by independent artists. Never mass-produced.</p></div>
+        <div class="why-card reveal"><svg viewBox="0 0 24 24"><path d="M1 8h14v9H1zM15 11h4l4 4v2h-8z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg><h3>Fast Delivery</h3><p>Express worldwide shipping with tracking on every single order.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews">
+    <div class="container">
+      <div class="sec-head reveal"><div><span class="label">Testimonials</span><h2>Worn & Loved</h2></div></div>
+      <div class="rev-grid">
+        <div class="rev-card reveal"><span class="quote">"</span><p>The heavyweight cotton is unreal. I've washed my Metropolis tee at least twenty times and the print still looks brand new. Worth every cent.</p><div class="rev-meta"><div class="rev-avatar">JK</div><div><b>Jordan Kim</b><span class="stars">★★★★★</span><br><span>Verified Buyer — Los Angeles</span></div></div></div>
+        <div class="rev-card reveal"><span class="quote">"</span><p>Finally a brand that understands fit. The oversized drop shoulders are perfect — not boxy, not sloppy. AMORA is my new default for everyday wear.</p><div class="rev-meta"><div class="rev-avatar">SM</div><div><b>Sofia Mendes</b><span class="stars">★★★★★</span><br><span>Verified Buyer — London</span></div></div></div>
+        <div class="rev-card reveal"><span class="quote">"</span><p>Ordered on Monday, delivered Wednesday. The packaging alone felt like unboxing a luxury watch. You can tell this brand cares about details.</p><div class="rev-meta"><div class="rev-avatar">DA</div><div><b>David Achebe</b><span class="stars">★★★★★</span><br><span>Verified Buyer — Lagos</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTAGRAM -->
+  <section>
+    <div class="container">
+      <div class="sec-head reveal"><div><span class="label">@amora.studio</span><h2>Follow The Movement</h2></div></div>
+      <div class="ig-grid" id="igGrid"></div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="container reveal">
+      <span class="label">Newsletter</span>
+      <h2>Join The Amora Community</h2>
+      <p>Early access to drops, members-only pricing and stories from the studio.</p>
+      <form class="news-form" onsubmit="subscribe(event)">
+        <input type="email" id="newsEmail" placeholder="Your email address" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ================= SHOP PAGE ================= -->
+<main id="page-shop" class="page">
+  <div class="page-hero"><div class="container">
+    <div class="crumb"><a onclick="go('home')">Home</a> / Shop</div>
+    <h1>Shop All</h1>
+  </div></div>
+  <div class="container shop-wrap">
+    <aside class="filters" id="filterPanel">
+      <button class="close-x" style="position:absolute;top:24px;right:24px" onclick="closeFilters()">×</button>
+      <div class="filter-group"><h4>Categories</h4>
+        <label class="check"><input type="checkbox" class="fcat" value="oversized" onchange="applyFilters()"> Oversized T-Shirts</label>
+        <label class="check"><input type="checkbox" class="fcat" value="graphic" onchange="applyFilters()"> Graphic T-Shirts</label>
+        <label class="check"><input type="checkbox" class="fcat" value="minimal" onchange="applyFilters()"> Minimal T-Shirts</label>
+        <label class="check"><input type="checkbox" class="fcat" value="new" onchange="applyFilters()"> New Arrivals</label>
+      </div>
+      <div class="filter-group"><h4>Price</h4>
+        <label class="check"><input type="radio" name="fprice" value="all" checked onchange="applyFilters()"> All Prices</label>
+        <label class="check"><input type="radio" name="fprice" value="0-55" onchange="applyFilters()"> Under $55</label>
+        <label class="check"><input type="radio" name="fprice" value="55-70" onchange="applyFilters()"> $55 – $70</label>
+      </div>
+      <div class="filter-group"><h4>Size</h4>
+        <label class="check"><input type="checkbox" class="fsize" value="S"> S</label>
+        <label class="check"><input type="checkbox" class="fsize" value="M"> M</label>
+        <label class="check"><input type="checkbox" class="fsize" value="L"> L</label>
+        <label class="check"><input type="checkbox" class="fsize" value="XL"> XL</label>
+        <label class="check"><input type="checkbox" class="fsize" value="XXL"> XXL</label>
+      </div>
+    </aside>
+    <div>
+      <div class="shop-toolbar">
+        <button class="btn btn-ghost filter-toggle" style="padding:12px 20px" onclick="openFilters()">Filters</button>
+        <span class="count" id="shopCount"></span>
+        <select onchange="applyFilters()" id="sortSel">
+          <option value="featured">Sort: Featured</option>
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+          <option value="name">Name: A–Z</option>
+        </select>
+      </div>
+      <div class="shop-grid" id="shopGrid"></div>
+    </div>
+  </div>
+</main>
+
+<!-- ================= PRODUCT PAGE ================= -->
+<main id="page-product" class="page">
+  <div class="container pd-wrap" id="pdWrap"></div>
+  <section style="padding-top:0"><div class="container">
+    <div class="sec-head"><div><span class="label">You May Also Like</span><h2>Related Products</h2></div></div>
+    <div class="grid-products" id="relatedGrid" style="grid-template-columns:repeat(4,1fr)"></div>
+  </div></section>
+</main>
+
+<!-- ================= CHECKOUT PAGE ================= -->
+<main id="page-checkout" class="page">
+  <div class="page-hero"><div class="container">
+    <div class="crumb"><a onclick="go('home')">Home</a> / <a onclick="openDrawer('cartDrawer')">Cart</a> / Checkout</div>
+    <h1>Checkout</h1>
+  </div></div>
+  <div class="container co-wrap">
+    <form class="co-form" id="checkoutForm" onsubmit="placeOrder(event)">
+      <h3>Contact</h3>
+      <div class="field"><label>Email Address</label><input type="email" required placeholder="you@example.com"></div>
+      <h3>Shipping Address</h3>
+      <div class="co-row">
+        <div class="field"><label>First Name</label><input required placeholder="Alex"></div>
+        <div class="field"><label>Last Name</label><input required placeholder="Rivera"></div>
+      </div>
+      <div class="field"><label>Street Address</label><input required placeholder="123 Studio Lane"></div>
+      <div class="co-row">
+        <div class="field"><label>City</label><input required placeholder="New York"></div>
+        <div class="field"><label>Postal Code</label><input required placeholder="10001"></div>
+      </div>
+      <div class="field"><label>Country</label>
+        <select><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>Germany</option><option>UAE</option><option>India</option></select>
+      </div>
+      <h3>Payment</h3>
+      <div class="field"><label>Card Number</label><input required placeholder="4242 4242 4242 4242" maxlength="19"></div>
+      <div class="co-row">
+        <div class="field"><label>Expiry</label><input required placeholder="MM / YY" maxlength="7"></div>
+        <div class="field"><label>CVC</label><input required placeholder="123" maxlength="4"></div>
+      </div>
+      <button class="btn btn-dark w-full" type="submit">Place Order →</button>
+    </form>
+    <aside class="summary" id="orderSummary"></aside>
+  </div>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer id="footer">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="logo">AMO<em style="color:var(--accent);font-style:normal">R</em>A</div>
+        <p>Premium printed T-shirts for people who wear their statement. Designed in-house, produced in limited runs, shipped worldwide.</p>
+        <div class="socials">
+          <a href="#" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.6a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-10.4a1.4 1.4 0 1 0 0-2.9 1.4 1.4 0 0 0 0 2.9z"/></svg></a>
+          <a href="#" title="X"><svg viewBox="0 0 24 24"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.2 2h6.4l4.4 5.9L18.9 2zm-1.1 18h1.7L7 3.8H5.2L17.8 20z"/></svg></a>
+          <a href="#" title="TikTok"><svg viewBox="0 0 24 24"><path d="M19.6 5.8a5 5 0 0 1-3.5-4.1V1h-3.4v13.6a2.9 2.9 0 1 1-2-2.7V8.4a6.3 6.3 0 1 0 5.4 6.2V8.1a8.3 8.3 0 0 0 4.6 1.4V6.1c-.4 0-.8-.1-1.1-.3z"/></svg></a>
+          <a href="#" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a onclick="go('home')">Home</a></li>
+          <li><a onclick="go('shop')">Shop</a></li>
+          <li><a onclick="go('shop','new')">New Arrivals</a></li>
+          <li><a onclick="go('home')">Collections</a></li>
+          <li><a onclick="go('home')">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Customer Support</h4>
+        <ul>
+          <li><a href="#">Shipping & Delivery</a></li>
+          <li><a href="#">Returns & Exchanges</a></li>
+          <li><a href="#">Size Guide</a></li>
+          <li><a href="#">Track Your Order</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="foot-contact">
+          <li>📍 12 Atelier Street, SoHo, New York, NY</li>
+          <li>✉️ hello@amora.studio</li>
+          <li>📞 +1 (212) 555-0147</li>
+          <li>🕐 Mon–Fri, 9am–6pm EST</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>Copyright © AMORA 2026. All rights reserved.</span>
+      <span style="display:flex;gap:24px"><a href="#">Privacy Policy</a><a href="#">Terms & Conditions</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= CART DRAWER ================= -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<aside class="drawer" id="cartDrawer">
+  <div class="drawer-head"><h3>Your Cart <span id="cartCountLabel"></span></h3><button class="close-x" onclick="closeAll()">×</button></div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot" id="cartFoot"></div>
+</aside>
+
+<!-- ================= WISHLIST DRAWER ================= -->
+<aside class="drawer" id="wishDrawer">
+  <div class="drawer-head"><h3>Wishlist</h3><button class="close-x" onclick="closeAll()">×</button></div>
+  <div class="drawer-body" id="wishBody"></div>
+</aside>
+
+<!-- ================= LOGIN MODAL ================= -->
+<div class="modal" id="loginModal">
+  <button class="close-x" style="position:absolute;top:18px;right:22px" onclick="closeAll()">×</button>
+  <h3 id="authTitle">Welcome Back</h3>
+  <p class="sub" id="authSub">Sign in to access your account and wishlist.</p>
+  <div id="loginFields">
+    <div class="field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"></div>
+    <div class="field"><label>Password</label><input type="password" placeholder="••••••••"></div>
+  </div>
+  <div id="regFields" style="display:none">
+    <div class="field"><label>Full Name</label><input type="text" placeholder="Alex Rivera"></div>
+    <div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+    <div class="field"><label>Password</label><input type="password" placeholder="Create a password"></div>
+  </div>
+  <button class="btn btn-dark w-full" onclick="doAuth()" id="authBtn">Sign In</button>
+  <p class="switch" id="authSwitch">New to AMORA? <a onclick="toggleAuth()">Create an account</a></p>
+</div>
+
+<!-- ================= SIZE GUIDE MODAL ================= -->
+<div class="modal" id="sizeModal" style="width:min(560px,94vw)">
+  <button class="close-x" style="position:absolute;top:18px;right:22px" onclick="closeAll()">×</button>
+  <h3>Size Guide</h3>
+  <p class="sub">Measurements in inches. AMORA tees are relaxed fit — size down for a regular fit.</p>
+  <table>
+    <tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th><th>Sleeve</th></tr>
+    <tr><td><b>S</b></td><td>38–40</td><td>27</td><td>18</td><td>8</td></tr>
+    <tr><td><b>M</b></td><td>40–42</td><td>28</td><td>19</td><td>8.5</td></tr>
+    <tr><td><b>L</b></td><td>42–44</td><td>29</td><td>20</td><td>9</td></tr>
+    <tr><td><b>XL</b></td><td>44–46</td><td>30</td><td>21</td><td>9.5</td></tr>
+    <tr><td><b>XXL</b></td><td>46–48</td><td>31</td><td>22</td><td>10</td></tr>
+  </table>
+</div>
+
+<div class="toast" id="toast"><i>✓</i><span id="toastMsg"></span></div>
+
+<script>
+/* ==================== DATA ==================== */
+const IMG = {
+  whiteFlat:'https://kimi-web-img.kimi.ai/img/static.vecteezy.com/c65bf1ce2764c7acd7f71704272d127010ff09fc.jpg',
+  whiteFold:'https://kimi-web-img.kimi.ai/img/static.vecteezy.com/f15f5ed2dcf69690973599ea061e64413a86659b.jpg',
+  ny:'https://kimi-web-img.kimi.ai/img/m.media-amazon.com/c4418d8bd4f3ad6ff445c273e36108bb500db18b.jpg',
+  nyClose:'https://kimi-web-img.kimi.ai/img/bestfitted.com/1b36a696ad1290f5901c3b9a68a7573d5c08a113.png',
+  olive:'https://kimi-web-img.kimi.ai/img/b2861582.assetcdn.net/06d41655cf00bdf9afa3181ec90219069ff24a06.jpg',
+  blue:'https://kimi-web-img.kimi.ai/img/www.bringitonline.in/24482f80733d63ce0e7ba23ec47d3e85c0130092.jpg',
+  gothic:'https://kimi-web-img.kimi.ai/img/bestfitted.com/4c3c4ba537db2073efed85c6c976759a10ec9749.jpg',
+  beigeOut:'https://kimi-web-img.kimi.ai/img/i.etsystatic.com/0d05b2c9c68f3bc5f0732924a87203b68274afa3.jpg',
+  urb:'https://kimi-web-img.kimi.ai/img/www.reetaus.com/22a14587cd4067cfb4ac390256803ebe044e5b95.jpg',
+  archive:'https://kimi-web-img.kimi.ai/img/www.bringitonline.in/a476a29050dd9e2f0aa6b5d68ae39ff1cce53cad.jpg',
+  duo:'https://kimi-web-img.kimi.ai/img/www.bringitonline.in/c697edc0cd340f69be2757331065780979eef5a6.jpg'
+};
+const PRODUCTS = [
+  {id:1,name:'Metropolis Graphic Tee',cat:'graphic',price:62,old:78,rating:5,flag:'Bestseller',img:IMG.ny,gallery:[IMG.ny,IMG.nyClose,IMG.duo],desc:'A bold collegiate graphic printed front-and-center on our signature heavyweight black base. Drop shoulders, boxy body, zero compromise.',fabric:'240 GSM combed ring-spun cotton, bio-washed',print:'High-density puff screen print, cured at 320°F'},
+  {id:2,name:'Ivory Sand Oversized',cat:'oversized',price:52,old:0,rating:5,flag:'New',img:IMG.beigeOut,gallery:[IMG.beigeOut,IMG.urb,IMG.whiteFold],desc:'Sun-washed ivory with a relaxed oversized cut. Garment-dyed for depth, finished with a ribbed collar that holds its shape.',fabric:'260 GSM slub cotton, garment-dyed',print:'Tonal AMORA chest embroidery'},
+  {id:3,name:'Olive Heavyweight Tee',cat:'minimal',price:55,old:0,rating:4,flag:'',img:IMG.olive,gallery:[IMG.olive,IMG.whiteFlat],desc:'Our cleanest silhouette. Deep olive tone, structured drape, no graphics — just fabric that speaks for itself.',fabric:'240 GSM compact cotton, pre-shrunk',print:'None — pure garment'},
+  {id:4,name:'Azure Back Print Tee',cat:'graphic',price:64,old:0,rating:5,flag:'Limited',img:IMG.blue,gallery:[IMG.blue,IMG.duo],desc:'Statement back print on a vivid azure base. Part of the Archive Collection — only 500 pieces worldwide.',fabric:'250 GSM ring-spun cotton',print:'Oversized archival DTG back print'},
+  {id:5,name:'Essential White — Minimal',cat:'minimal',price:45,old:58,rating:5,flag:'',img:IMG.whiteFlat,gallery:[IMG.whiteFlat,IMG.whiteFold],desc:'The perfect white tee, refined. Crisp hand-feel, reinforced seams, and a fit that works under everything.',fabric:'220 GSM long-staple cotton',print:'None — pure garment'},
+  {id:6,name:'Noir Gothic Graphic',cat:'graphic',price:66,old:0,rating:4,flag:'Limited',img:IMG.gothic,gallery:[IMG.gothic,IMG.nyClose],desc:'Dark-art inspired front graphic with sleeve hit. For nights when minimal won\u2019t cut it.',fabric:'250 GSM heavyweight cotton',print:'Two-color discharge screen print'},
+  {id:7,name:'Moss URB Oversized',cat:'oversized',price:50,old:0,rating:5,flag:'New',img:IMG.urb,gallery:[IMG.urb,IMG.beigeOut],desc:'Stone-moss oversized tee with tonal chest mark. Drapes clean, layers effortlessly.',fabric:'240 GSM slub cotton',print:'Tonal pigment print'},
+  {id:8,name:'Archive Duo Graphic Set',cat:'new',price:72,old:90,rating:5,flag:'New',img:IMG.archive,gallery:[IMG.archive,IMG.duo],desc:'Hand-drawn atelier graphics front and back. The centerpiece of Drop 07 — crimson on heavyweight white.',fabric:'250 GSM carded cotton',print:'Vintage-wash screen print, hand-cured'},
+];
+const SIZES=['S','M','L','XL','XXL'];
+
+/* ==================== STATE ==================== */
+let cart=[], wishlist=[], currentPD=null, pdSize=null, pdQty=1, shopQuery='';
+
+/* ==================== HELPERS ==================== */
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const money=n=>'$'+n.toFixed(2);
+function toast(msg){$('#toastMsg').textContent=msg;$('#toast').classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>$('#toast').classList.remove('show'),2400)}
+function stars(r){return '★'.repeat(r)+'☆'.repeat(5-r)}
+
+/* ==================== ROUTING ==================== */
+function go(page,tab){
+  $$('.page').forEach(p=>p.classList.remove('active'));
+  $('#page-'+page).classList.add('active');
+  $$('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.nav===page));
+  closeAll();window.scrollTo({top:0});
+  if(page==='shop'&&tab){setTimeout(()=>{ $$('.fcat').forEach(c=>c.checked=(c.value===tab));applyFilters(); },50)}
+}
+function openProduct(id){
+  const p=PRODUCTS.find(x=>x.id===id);currentPD=p;pdSize=null;pdQty=1;
+  $('#pdWrap').innerHTML=`
+    <div class="pd-gallery">
+      <div class="pd-main" id="pdMain"><img src="${p.gallery[0]}" alt="${p.name}" id="pdImg"></div>
+      <div class="pd-thumbs">${p.gallery.map((g,i)=>`<img src="${g}" class="${i===0?'active':''}" onclick="swapImg(this,'${g}')">`).join('')}</div>
+    </div>
+    <div class="pd-info">
+      <div class="crumb"><a onclick="go('home')">Home</a> / <a onclick="go('shop')">Shop</a> / ${p.name}</div>
+      <h1>${p.name}</h1>
+      <div class="stars" style="font-size:14px;margin-top:12px">${stars(p.rating)} <span style="color:var(--grey);letter-spacing:0;font-family:var(--font-b)">(${120+p.id*17} reviews)</span></div>
+      <div class="pd-price">${money(p.price)}${p.old?`<s>${money(p.old)}</s>`:''}</div>
+      <p class="pd-desc">${p.desc}</p>
+      <div class="pd-block">
+        <h4>Select Size <span class="size-guide-link" onclick="openModal('sizeModal')">Size Guide</span></h4>
+        <div class="sizes">${SIZES.map(s=>`<button class="size" onclick="pickSize(this,'${s}')">${s}</button>`).join('')}</div>
+      </div>
+      <div class="pd-block pd-buy">
+        <div class="qty"><button onclick="chQty(-1)">−</button><span id="pdQty">1</span><button onclick="chQty(1)">+</button></div>
+        <button class="btn btn-dark" style="flex:1;justify-content:center" onclick="addToCartFromPD(false)">Add to Cart</button>
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="addToCartFromPD(true)">Buy Now</button>
+      </div>
+      <div class="acc">
+        <div class="acc-item open"><button class="acc-head" onclick="toggleAcc(this)">Fabric & Care <span>+</span></button><div class="acc-body" style="max-height:200px"><p>${p.fabric}. Machine wash cold, inside out. Tumble dry low. Do not iron directly on print.</p></div></div>
+        <div class="acc-item"><button class="acc-head" onclick="toggleAcc(this)">Print Quality <span>+</span></button><div class="acc-body"><p>${p.print}. Every print is cured and stress-tested to withstand 50+ wash cycles without cracking or fading.</p></div></div>
+        <div class="acc-item"><button class="acc-head" onclick="toggleAcc(this)">Shipping & Returns <span>+</span></button><div class="acc-body"><p>Free worldwide shipping over $120. Express delivery in 2–5 business days. 30-day hassle-free returns.</p></div></div>
+      </div>
+      <div class="pd-meta" style="margin-top:24px">
+        <div><b>SKU:</b> AMR-2026-${String(p.id).padStart(3,'0')}</div>
+        <div><b>Category:</b> ${p.cat.charAt(0).toUpperCase()+p.cat.slice(1)} T-Shirts</div>
+        <div><b>Availability:</b> <span style="color:#2e7d32">In Stock — Ships in 24h</span></div>
+      </div>
+    </div>`;
+  const rel=PRODUCTS.filter(x=>x.id!==p.id&&(x.cat===p.cat||x.cat==='new')).slice(0,4);
+  $('#relatedGrid').innerHTML=rel.map(cardHTML).join('');
+  bindReveals();go('product');
+  $('#pdMain').addEventListener('mousemove',e=>{const r=e.currentTarget.getBoundingClientRect();$('#pdImg').style.transformOrigin=`${(e.clientX-r.left)/r.width*100}% ${(e.clientY-r.top)/r.height*100}%`;$('#pdImg').style.transform='scale(1.7)'});
+  $('#pdMain').addEventListener('mouseleave',()=>{$('#pdImg').style.transform='scale(1)'});
+}
+function swapImg(el,src){$('#pdImg').src=src;$$('.pd-thumbs img').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function pickSize(el,s){pdSize=s;$$('.size').forEach(b=>b.classList.remove('active'));el.classList.add('active')}
+function chQty(d){pdQty=Math.max(1,Math.min(9,pdQty+d));$('#pdQty').textContent=pdQty}
+function toggleAcc(btn){const item=btn.parentElement,body=item.querySelector('.acc-body'),open=item.classList.contains('open');$$('.acc-item').forEach(i=>{i.classList.remove('open');i.querySelector('.acc-body').style.maxHeight=0});if(!open){item.classList.add('open');body.style.maxHeight=body.scrollHeight+'px'}}
+
+/* ==================== CARDS ==================== */
+function cardHTML(p){
+  const inWish=wishlist.some(w=>w.id===p.id);
+  return `<div class="card in">
+    <div class="card-img" onclick="openProduct(${p.id})">
+      ${p.flag?`<span class="card-flag ${p.flag==='New'?'new':''}">${p.flag}</span>`:''}
+      <button class="wish-btn ${inWish?'active':''}" onclick="event.stopPropagation();toggleWish(${p.id})"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.5-10-10C.5 7 3 4 6.5 4 9 4 11 6 12 7.5 13 6 15 4 17.5 4 21 4 23.5 7 22 11c-2 4.5-10 10-10 10z"/></svg></button>
+      <img src="${p.img}" alt="${p.name}" loading="lazy">
+      ${p.gallery[1]?`<img class="alt" src="${p.gallery[1]}" alt="" loading="lazy">`:''}
+      <div class="card-actions">
+        <button onclick="event.stopPropagation();quickAdd(${p.id})">Add to Cart</button>
+        <button onclick="event.stopPropagation();openProduct(${p.id})">View</button>
+      </div>
+    </div>
+    <div class="card-info">
+      <div><h3 onclick="openProduct(${p.id})">${p.name}</h3><div class="card-cat">${p.cat.charAt(0).toUpperCase()+p.cat.slice(1)} Tee</div><div class="stars">${stars(p.rating)}</div></div>
+      <span class="card-price">${money(p.price)}</span>
+    </div>
+  </div>`;
+}
+function quickAdd(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  const ex=cart.find(c=>c.id===id&&c.size==='M');
+  ex?ex.qty++:cart.push({id:p.id,name:p.name,price:p.price,img:p.img,size:'M',qty:1});
+  updateCart();toast(p.name+' added to cart (Size M)');
+}
+
+/* ==================== HOME RENDER ==================== */
+function renderFeatured(cat){
+  const list=cat==='all'?PRODUCTS.slice(0,4):PRODUCTS.filter(p=>p.cat===cat).concat(cat==='all'?[]:PRODUCTS.filter(p=>p.cat==='new'&&p.cat!==cat)).slice(0,4);
+  $('#featuredGrid').innerHTML=list.map(cardHTML).join('');
+}
+$('#homeTabs').addEventListener('click',e=>{
+  if(!e.target.classList.contains('tab'))return;
+  $$('#homeTabs .tab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');
+  renderFeatured(e.target.dataset.cat);
+});
+const marqueeItems='Premium Prints <i>✦</i> 240 GSM Cotton <i>✦</i> Limited Runs <i>✦</i> Free Shipping Over $120 <i>✦</i> Designed in NYC <i>✦</i> ';
+$('#marquee').innerHTML=marqueeItems.repeat(4);
+$('#igGrid').innerHTML=[IMG.ny,IMG.beigeOut,IMG.archive,IMG.olive,IMG.blue,IMG.urb].map(src=>`<div class="ig-item"><img src="${src}" alt="AMORA on Instagram" loading="lazy"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="#fff"/></svg></div>`).join('');
+renderFeatured('all');
+
+/* ==================== SHOP ==================== */
+function applyFilters(){
+  const cats=[...$$('.fcat:checked')].map(c=>c.value);
+  const price=$('input[name=fprice]:checked').value;
+  const sort=$('#sortSel').value;
+  let list=PRODUCTS.filter(p=>{
+    if(cats.length&&!cats.includes(p.cat))return false;
+    if(price!=='all'){const[a,b]=price.split('-').map(Number);if(p.price<a||p.price>b)return false}
+    if(shopQuery&&!p.name.toLowerCase().includes(shopQuery))return false;
+    return true;
+  });
+  if(sort==='low')list.sort((a,b)=>a.price-b.price);
+  if(sort==='high')list.sort((a,b)=>b.price-a.price);
+  if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
+  $('#shopGrid').innerHTML=list.length?list.map(cardHTML).join(''):`<div class="empty" style="grid-column:1/-1"><b>No products found</b>Try adjusting your filters or search.</div>`;
+  $('#shopCount').textContent=list.length+' products';
+}
+function runSearch(q){shopQuery=q.trim().toLowerCase();if(!$('#page-shop').classList.contains('active'))go('shop');applyFilters()}
+function openFilters(){$('#filterPanel').classList.add('show');$('#overlay').classList.add('show')}
+function closeFilters(){$('#filterPanel').classList.remove('show');$('#overlay').classList.remove('show')}
+
+/* ==================== CART ==================== */
+function addToCartFromPD(buyNow){
+  if(!pdSize){toast('Please select a size first');return}
+  const p=currentPD;
+  const ex=cart.find(c=>c.id===p.id&&c.size===pdSize);
+  ex?ex.qty+=pdQty:cart.push({id:p.id,name:p.name,price:p.price,img:p.img,size:pdSize,qty:pdQty});
+  updateCart();
+  if(buyNow){go('checkout');renderSummary()}else{toast(`${p.name} (${pdSize}) added to cart`);openDrawer('cartDrawer')}
+}
+function updateCart(){
+  const n=cart.reduce((s,c)=>s+c.qty,0);
+  $('#cartBadge').textContent=n;$('#cartBadge').classList.toggle('show',n>0);
+  $('#cartCountLabel').textContent=n?`(${n})`:'';
+  if(!cart.length){$('#cartBody').innerHTML=`<div class="empty"><b>Your cart is empty</b>Discover pieces that speak for you.</div>`;$('#cartFoot').innerHTML=`<button class="btn btn-dark w-full" onclick="closeAll();go('shop')">Start Shopping →</button>`;return}
+  $('#cartBody').innerHTML=cart.map((c,i)=>`<div class="cart-row">
+    <img src="${c.img}" alt="${c.name}">
+    <div><h4>${c.name}</h4><div class="meta">Size ${c.size}</div>
+      <div class="qty"><button onclick="cartQty(${i},-1)">−</button><span>${c.qty}</span><button onclick="cartQty(${i},1)">+</button></div>
+    </div>
+    <div class="right"><span class="price">${money(c.price*c.qty)}</span><button class="remove" onclick="cartRemove(${i})">Remove</button></div>
+  </div>`).join('');
+  const sub=cart.reduce((s,c)=>s+c.price*c.qty,0),ship=sub>=120?0:9.95;
+  $('#cartFoot').innerHTML=`<div class="totals">
+    <div><span>Subtotal</span><span>${money(sub)}</span></div>
+    <div><span>Shipping</span><span>${ship?money(ship):'FREE'}</span></div>
+    <div class="grand"><span>Total</span><span>${money(sub+ship)}</span></div></div>
+    <button class="btn btn-dark w-full" onclick="closeAll();go('checkout');renderSummary()">Proceed to Checkout →</button>`;
+}
+function cartQty(i,d){cart[i].qty=Math.max(1,cart[i].qty+d);updateCart();if($('#page-checkout').classList.contains('active'))renderSummary()}
+function cartRemove(i){cart.splice(i,1);updateCart();if($('#page-checkout').classList.contains('active'))renderSummary()}
+
+/* ==================== WISHLIST ==================== */
+function toggleWish(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  const i=wishlist.findIndex(w=>w.id===id);
+  if(i>-1){wishlist.splice(i,1);toast(p.name+' removed from wishlist')}
+  else{wishlist.push(p);toast(p.name+' saved to wishlist')}
+  const n=wishlist.length;$('#wishBadge').textContent=n;$('#wishBadge').classList.toggle('show',n>0);
+  renderWishlist();
+  if($('#page-home').classList.contains('active'))renderFeatured($('#homeTabs .tab.active').dataset.cat);
+  if($('#page-shop').classList.contains('active'))applyFilters();
+}
+function renderWishlist(){
+  $('#wishBody').innerHTML=wishlist.length?wishlist.map(w=>`<div class="cart-row">
+    <img src="${w.img}"><div><h4>${w.name}</h4><div class="meta">${money(w.price)}</div>
+    <button class="btn btn-dark" style="padding:10px 20px;font-size:10px" onclick="quickAdd(${w.id});toggleWish(${w.id})">Move to Cart</button></div>
+    <div class="right"><button class="remove" onclick="toggleWish(${w.id})">Remove</button></div></div>`).join('')
+  :`<div class="empty"><b>Nothing saved yet</b>Tap the heart on any product to save it here.</div>`;
+}
+
+/* ==================== CHECKOUT ==================== */
+function renderSummary(){
+  const sub=cart.reduce((s,c)=>s+c.price*c.qty,0),ship=sub>=120?0:9.95;
+  $('#orderSummary').innerHTML=`<h3>Order Summary</h3>
+    ${cart.map(c=>`<div class="sum-row"><img src="${c.img}"><div class="grow"><b>${c.name}</b><span>Size ${c.size} × ${c.qty}</span></div><span>${money(c.price*c.qty)}</span></div>`).join('')}
+    <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
+    <div class="totals"><div><span>Subtotal</span><span>${money(sub)}</span></div>
+    <div><span>Shipping</span><span>${ship?money(ship):'FREE'}</span></div>
+    <div class="grand"><span>Total</span><span>${money(sub+ship)}</span></div></div>`;
+}
+function placeOrder(e){
+  e.preventDefault();
+  if(!cart.length){toast('Your cart is empty');return}
+  const num='AMR-'+Math.floor(100000+Math.random()*900000);
+  cart=[];updateCart();$('#checkoutForm').reset();
+  document.getElementById('page-checkout').innerHTML=`<div class="container" style="text-align:center;padding:130px 0">
+    <div style="font-size:64px">✓</div>
+    <h1 style="margin:24px 0 14px">Order Confirmed</h1>
+    <p style="color:var(--grey);margin-bottom:8px">Thank you for shopping with AMORA.</p>
+    <p style="font-family:var(--font-d);font-weight:700;letter-spacing:.1em">ORDER #${num}</p>
+    <p style="color:var(--grey);font-size:14px;margin:18px 0 36px">A confirmation email with tracking details is on its way.</p>
+    <button class="btn btn-dark" onclick="location.reload()">Continue Shopping →</button></div>`;
+  window.scrollTo({top:0});
+  toast('Order '+num+' placed successfully');
+}
+
+/* ==================== UI CHROME ==================== */
+function openDrawer(id){closeAll(true);$('#overlay').classList.add('show');$('#'+id).classList.add('show')}
+function openModal(id){closeAll(true);$('#overlay').classList.add('show');$('#'+id).classList.add('show')}
+function closeAll(keepOverlay){$$('.drawer,.modal').forEach(d=>d.classList.remove('show'));if(!keepOverlay){$('#overlay').classList.remove('show');$('#filterPanel')?.classList.remove('show')}}
+function toggleSearch(){$('#searchbar').classList.toggle('open');if($('#searchbar').classList.contains('open'))$('#searchInput').focus()}
+function toggleMenu(){$('#navLinks').classList.toggle('open');$('#hamburger').classList.toggle('open')}
+function toggleAuth(){
+  const login=$('#loginFields').style.display!=='none';
+  $('#loginFields').style.display=login?'none':'block';
+  $('#regFields').style.display=login?'block':'none';
+  $('#authTitle').textContent=login?'Create Account':'Welcome Back';
+  $('#authSub').textContent=login?'Join AMORA for faster checkout and early drops.':'Sign in to access your account and wishlist.';
+  $('#authBtn').textContent=login?'Create Account':'Sign In';
+  $('#authSwitch').innerHTML=login?'Already a member? <a onclick="toggleAuth()">Sign in</a>':'New to AMORA? <a onclick="toggleAuth()">Create an account</a>';
+}
+function doAuth(){closeAll();toast('Welcome to AMORA — you are signed in')}
+function subscribe(e){e.preventDefault();toast('Welcome to the AMORA community ✦');$('#newsEmail').value=''}
+
+/* ==================== SCROLL REVEAL ==================== */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+function bindReveals(){$$('.reveal:not(.in), .card:not(.in)').forEach(el=>io.observe(el))}
+bindReveals();
+
+/* init */
+applyFilters();updateCart();renderWishlist();
+</script>
+</body>
+</html>
